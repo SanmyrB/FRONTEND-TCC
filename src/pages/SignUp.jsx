@@ -122,7 +122,11 @@ const SignUp = () => {
       <aside className="w-[40%] bg-gray-200 p-[50px] flex flex-col justify-center align-center">
         <div>
           <div className="bg-white rounded-md shadow p-4 items-center w-[90%]">
-            <h1 className="text-3xl font-bold mb-4">SIMULADOR</h1>
+            <img
+              src="./public/img/Logo_Usina.png"
+              alt="Logo Usina"
+              className="mb-4"
+            />
             <p>Crie sua conta</p>
 
             <form ref={formRef} onSubmit={handleFormSubmit} noValidate>
@@ -245,7 +249,13 @@ const SignUp = () => {
           </div>
         </div>
       </aside>
-      <main className="flex-1 bg-gray-400"></main>
+      <main className="flex-1 bg-gray-400">
+        <img
+          src="./public/img/imagem_fundo.jpg"
+          alt="Usina"
+          className="w-full h-full object-cover"
+        />
+      </main>
     </div>
   );
 };

@@ -105,7 +105,11 @@ const SignIn = () => {
       <aside className="w-[40%] bg-gray-200 p-[50px] flex flex-col justify-center align-center">
         <div>
           <div className="bg-white rounded-md shadow p-4 items-center w-[90%]">
-            <h1 className="text-3xl font-bold mb-4">SIMULADOR</h1>
+            <img
+              src="./public/img/Logo_Usina.png"
+              alt="Logo Usina"
+              className="mb-4"
+            />
             <p>Entre com sua conta</p>
             <form onSubmit={formik.handleSubmit}>
               <p className="mt-4">E-mail</p>
@@ -194,7 +198,11 @@ const SignIn = () => {
                 </div>
               )}
 
-              <Button type="submit" disabled={formik.isSubmitting}>
+              <Button
+                className="mt-5"
+                type="submit"
+                disabled={formik.isSubmitting}
+              >
                 {formik.isSubmitting ? "Entrando..." : "Entrar"}
               </Button>
             </form>
@@ -212,7 +220,13 @@ const SignIn = () => {
           </div>
         </div>
       </aside>
-      <main className="flex-1 bg-gray-400"></main>
+      <main className="flex-1 bg-gray-400">
+        <img
+          src="./public/img/imagem_fundo.jpg"
+          alt="Usina"
+          className="w-full h-full object-cover"
+        />
+      </main>
     </div>
   );
 };

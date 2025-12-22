@@ -777,4 +777,36 @@ export function calcularEvaporadores({
   return resultados;
 }
 
-// fim PrevAcucarLib.js
+export function calcularCozedores(
+  vaz_caldo_entrada,
+  brix_entrada,
+  pol_entrada,
+  brixMelFinal,
+  purezMelFinal,
+  disponibilidade
+) {
+  const purez_entrada = (pol_entrada / brix_entrada) * 100;
+
+  const vazSol_entrada = vaz_caldo_entrada * (brix_entrada / 100);
+  const vazSac_entrada = vazSol_entrada * (purez_entrada / 100);
+
+  const vazImpureza = vazSol_entrada - vazSac_entrada;
+
+  const vazSacMelF = vazImpureza * (purezMelFinal / (100 - purezMelFinal));
+  const vazMelF = (vazSacMelF * vazImpureza) / (brixMelFinal / 100);
+
+  const vazSugar = vazSac_entrada - vazSacMelF;
+
+  const sacas = (disponibilidade * vazSugar * 1000) / 50;
+
+  const SJM = (vazSugar / vazSac_entrada) * 100;
+
+  return {
+    Cozedores: {
+      "Vazão de Açúcar Final": vazSugar,
+      "Total de Sacas": sacas,
+      "SJM (%)": SJM.toFixed(2),
+      "Vazão de Mel Final": vazMelF,
+    },
+  };
+}

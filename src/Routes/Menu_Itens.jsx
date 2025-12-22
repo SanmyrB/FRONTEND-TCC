@@ -7,6 +7,7 @@ import {
   ChartPie,
   Lollipop,
   TrendingUp,
+  LibraryBig,
 } from "lucide-react";
 import Menu_Button from "../components/Menu_Button";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -115,6 +116,13 @@ export default function SidebarMenu() {
       icon: TrendingUp,
       path: "/home/previsibilidade-acucar",
       areas: ["Fábrica de Açúcar"], // Apenas Fábrica
+    },
+    {
+      id: "Estoque",
+      label: "Gestão de Estoque",
+      icon: LibraryBig,
+      path: "/home/gestao-estoque",
+      areas: ["Planejamento e Controle da Produção"],
     },
   ];
 

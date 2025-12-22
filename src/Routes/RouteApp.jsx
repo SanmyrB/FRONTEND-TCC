@@ -14,6 +14,7 @@ import VisualizAnalise from "../pages/VisulizAnalise";
 import UltimaAnalisePage from "../pages/UltimaAnalisePage";
 import FabAcucar from "../pages/FabAcucar";
 import PrevAcucar from "../pages/PrevAcucar";
+import controleEstoque from "../pages/controleEstoque";
 
 const Private = ({ Item, allowedAreas }) => {
   // ✅ Verifica sessionStorage para manter o login durante a sessão
@@ -154,6 +155,15 @@ const RoutesApp = () => {
                 <Private
                   Item={PrevAcucar}
                   allowedAreas={["Fábrica de Açúcar"]}
+                />
+              }
+            />
+            <Route
+              path="gestao-estoque"
+              element={
+                <Private
+                  Item={controleEstoque}
+                  allowedAreas={["Planejamento e Controle da Produção"]}
                 />
               }
             />

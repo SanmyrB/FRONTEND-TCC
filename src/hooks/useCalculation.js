@@ -47,6 +47,8 @@ export const useCalculation = (dados, listaOriginalEvaporadores) => {
       "pressaoVapor",
       "polXarope",
       "areaEvaporador",
+      "brixMelF",
+      "purezMelF",
     ];
 
     for (const campo of camposObrigatorios) {
@@ -215,6 +217,21 @@ export const useCalculation = (dados, listaOriginalEvaporadores) => {
         alvo_brix_final: [60, 63], // Range de brix final
       });
 
+      const vazFinalEvap =
+        Evaporadores?.Evaporadores?.["Vazão de Caldo em Cada Efeito (kg/h)"][
+          Evaporadores?.Evaporadores?.["Vazão de Caldo em Cada Efeito (kg/h)"]
+            .length - 1
+        ];
+
+      const Cozedores = PrevLib.calcularCozedores(
+        vazFinalEvap,
+        Evaporadores?.Evaporadores?.["Brix Final (º)"],
+        parseFloat(dados.polXarope),
+        parseFloat(dados.brixMelF),
+        parseFloat(dados.purezMelF),
+        Extracao?.Extração?.["Disponibilidade Geral (h)"]
+      );
+
       // =============== CONSOLIDAR RESULTADOS ===============
       const resultadosConsolidados = {
         Extracao,
@@ -228,6 +245,7 @@ export const useCalculation = (dados, listaOriginalEvaporadores) => {
         FiltroPrensa,
         PeneiraRotativa,
         Evaporadores,
+        Cozedores,
       };
 
       setResultados(resultadosConsolidados);

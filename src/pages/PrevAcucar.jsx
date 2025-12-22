@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Chart, registerables } from "chart.js";
-import ChartDataLabels from "chartjs-plugin-datalabels";
 import {
   Keyboard,
   Info,
@@ -16,6 +15,8 @@ import {
   Vegan,
   CakeSlice,
   Percent,
+  Candy,
+  Shell,
 } from "lucide-react";
 
 // Hooks e componentes customizados
@@ -56,6 +57,8 @@ const PrevAcucar = () => {
     pressaoVapor: 1.5,
     polXarope: 50.05,
     areaEvaporador: "1000",
+    brixMelF: 67.92,
+    purezMelF: 58.26,
   });
 
   // Hook de cálculo
@@ -309,6 +312,34 @@ const PrevAcucar = () => {
                 options={opcoesEvaporadores}
               />
             </FormSection>
+
+            <div>
+              <h3 className="text-lg font-bold mb-4">Cozedores</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+                <Input
+                  label="Brix do Mel Final (º)"
+                  type="number"
+                  placeholder="Ex: 67,92"
+                  min="0"
+                  max="100"
+                  value={dados.brixMelF}
+                  onChange={(e) =>
+                    handleInputChange("brixMelF", e.target.value)
+                  }
+                />
+                <Input
+                  label="Pureza do Mel Final (%)"
+                  type="number"
+                  placeholder="Ex: 58,26"
+                  min="0"
+                  max="100"
+                  value={dados.purezMelF}
+                  onChange={(e) =>
+                    handleInputChange("purezMelF", e.target.value)
+                  }
+                />
+              </div>
+            </div>
 
             {/* Botões de Ação */}
             <div className="flex justify-end space-x-4 mt-8 pt-6 border-t border-gray-200">
@@ -773,7 +804,11 @@ const PrevAcucar = () => {
                     )
                       ? resultados.Evaporadores.Evaporadores[
                           "Vazão de Caldo em Cada Efeito (kg/h)"
-                        ][0]
+                        ][
+                          resultados.Evaporadores.Evaporadores[
+                            "Vazão de Caldo em Cada Efeito (kg/h)"
+                          ].length - 1
+                        ]
                       : resultados.Evaporadores?.Evaporadores?.[
                           "Vazão de Caldo em Cada Efeito (kg/h)"
                         ]
@@ -934,6 +969,43 @@ const PrevAcucar = () => {
                 </ChartWrapper>
               </div>
             </div>
+
+            {/* ===================================== COZEDORES ===================================== */}
+            <div>
+              <SectionHeader
+                title="Produção de Açúcar"
+                onInfoClick={() => setModalAberto("Cozedores")}
+                infoTooltip="Ver detalhes dos cozedores"
+              />
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+                <MetricCard
+                  title="Sacas Produzidas"
+                  value={resultados.Cozedores?.Cozedores?.["Total de Sacas"]}
+                  icon={Candy}
+                  unit="sacas"
+                  precision={0}
+                />
+
+                <MetricCard
+                  title="SJM"
+                  value={resultados.Cozedores?.Cozedores?.["SJM (%)"]}
+                  icon={Percent}
+                  unit="%"
+                  precision={0}
+                />
+
+                <MetricCard
+                  title="Vazão de Mel Final"
+                  value={
+                    resultados.Cozedores?.Cozedores?.["Vazão de Mel Final"]
+                  }
+                  icon={Shell}
+                  unit="ton/h"
+                  precision={0}
+                />
+              </div>
+            </div>
           </div>
         )}
 
@@ -1006,6 +1078,13 @@ const PrevAcucar = () => {
           <ModalDetalhes
             titulo="Detalhes do Filtro Prensa"
             dados={resultados?.FiltroPrensa?.["Filtro Prensa"]}
+            onClose={() => setModalAberto(null)}
+          />
+        )}
+        {modalAberto === "Cozedores" && (
+          <ModalDetalhes
+            titulo="Detalhes dos Cozedores"
+            dados={resultados?.Cozedores?.Cozedores}
             onClose={() => setModalAberto(null)}
           />
         )}
