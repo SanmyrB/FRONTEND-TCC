@@ -208,6 +208,7 @@ const SignUp = () => {
               )}
 
               <Button
+                className="mt-4"
                 type="submit"
                 disabled={
                   isSubmitting || formik.isSubmitting || submitLockRef.current
@@ -251,7 +252,7 @@ const SignUp = () => {
       </aside>
       <main className="flex-1 bg-gray-400">
         <img
-          src="./public/img/imagem_fundo.jpg"
+          src="./public/img/imagem_fundo.png"
           alt="Usina"
           className="w-full h-full object-cover"
         />

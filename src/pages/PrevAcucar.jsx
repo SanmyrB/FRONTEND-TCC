@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 
 // Hooks e componentes customizados
-import { usePrevAcucarCalculation } from "../hooks/useCalculation";
+import { usePrevAcucarCalculation } from "../hooks/useCalculationAcucar";
 import Input from "../components/Input";
 import ModalDetalhes from "../components/ModalDetalhes";
 import LoadingOverlay from "../components/LoadingOverlay";
@@ -830,10 +830,10 @@ const PrevAcucar = () => {
                   title="Injeção de Vapor VE"
                   value={
                     resultados.Evaporadores?.Evaporadores?.[
-                      "Injeção de Vapor VE (kg/h)"
+                      "Injeção de Vapor VE (ton/h)"
                     ]
                   }
-                  unit="kg/h"
+                  unit="ton/h"
                   icon={Wind}
                   precision={2}
                 />

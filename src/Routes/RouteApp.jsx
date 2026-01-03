@@ -15,6 +15,8 @@ import UltimaAnalisePage from "../pages/UltimaAnalisePage";
 import FabAcucar from "../pages/FabAcucar";
 import PrevAcucar from "../pages/PrevAcucar";
 import controleEstoque from "../pages/controleEstoque";
+import FabVap from "../pages/fabVap";
+import prevVap from "../pages/prevVap";
 
 const Private = ({ Item, allowedAreas }) => {
   // ✅ Verifica sessionStorage para manter o login durante a sessão
@@ -26,19 +28,7 @@ const Private = ({ Item, allowedAreas }) => {
     const userData = JSON.parse(usuarioLogado);
     console.log("Dados do usuário na rota:", userData); // Debug
 
-    // Mapeamento de áreas para casos de valores diferentes
-    const areaMap = {
-      0: "Laboratório",
-      1: "Armazém",
-      2: "Planejamento e Controle da Produção",
-      Laboratório: "Laboratório",
-      Armazém: "Armazém",
-      "Planejamento e Controle da Produção":
-        "Planejamento e Controle da Produção",
-      PCP: "Planejamento e Controle da Produção",
-    };
-
-    const userArea = areaMap[userData.area] || userData.area;
+    const userArea = userData.area;
 
     // Se áreas específicas forem definidas e o usuário não tiver acesso
     if (allowedAreas && !allowedAreas.includes(userArea)) {
@@ -87,6 +77,7 @@ const RoutesApp = () => {
                     "Armazém",
                     "Planejamento e Controle da Produção",
                     "Fábrica de Açúcar",
+                    "Caldeira",
                   ]}
                 />
               }
@@ -101,6 +92,7 @@ const RoutesApp = () => {
                     "Armazém",
                     "Planejamento e Controle da Produção",
                     "Fábrica de Açúcar",
+                    "Caldeira",
                   ]}
                 />
               }
@@ -166,6 +158,14 @@ const RoutesApp = () => {
                   allowedAreas={["Planejamento e Controle da Produção"]}
                 />
               }
+            />
+            <Route
+              path="previsibilidade-vapor"
+              element={<Private Item={prevVap} allowedAreas={["Caldeira"]} />}
+            />
+            <Route
+              path="producao-vapor"
+              element={<Private Item={FabVap} allowedAreas={["Caldeira"]} />}
             />
           </Route>
 

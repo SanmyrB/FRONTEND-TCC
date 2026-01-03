@@ -222,7 +222,7 @@ const SignIn = () => {
       </aside>
       <main className="flex-1 bg-gray-400">
         <img
-          src="./public/img/imagem_fundo.jpg"
+          src="./public/img/imagem_fundo.png"
           alt="Usina"
           className="w-full h-full object-cover"
         />

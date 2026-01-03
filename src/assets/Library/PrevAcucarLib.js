@@ -230,24 +230,42 @@ export function calcularSulfitacao(
 /**
  * Caleação
  */
-export function calcularCaleacao(
-  vaz_entrada,
-  cal_tonc = 650,
-  mm_ca = 100,
-  mm_h2o = 18
+export function calcularBrixPosCaleacao(
+  vaz_caldo_ton_h, // Vazão de caldo na entrada (kg/h)
+  brix_entrada, // °Brix do caldo antes da caleação
+  vaz_cana_tph, // Vazão de cana (t/h)
+  dosagem_cal_gpt = 650 // g de cal por tonelada de cana
 ) {
-  const vaz_cal_g = vaz_entrada * cal_tonc;
-  const vaz_cal_mol = vaz_cal_g / mm_ca;
-  const vaz_h2o_mol = vaz_cal_mol / 4;
-  const vaz_h2o_g = vaz_h2o_mol * mm_h2o;
+  // 1) Cálculo da vazão de cal (kg/h)
+  const dosagem_cal_kgpt = dosagem_cal_gpt / 1000;
+  const vaz_cal_kg = vaz_cana_tph * dosagem_cal_kgpt;
 
-  const vaz_cal_kg = vaz_cal_g / 1000;
-  const vaz_h2o_kg = vaz_h2o_g / 1000;
+  // 2) Parâmetros do leite de cal (7 °Baumé)
+  const baume = 7;
+  const dens_rel = 145 / (145 - baume);
+  const fracao_cal = (dens_rel - 1) / dens_rel; //
+
+  // 3) Vazão de água do leite de cal (kg/h)
+  const vaz_total_leite_cal = vaz_cal_kg / fracao_cal;
+  const vaz_agua_kg = vaz_total_leite_cal - vaz_cal_kg;
+
+  const vaz_caldo_kg_h = vaz_caldo_ton_h * 1000;
+
+  // 4) Massa de sólidos solúveis (constante)
+  const massa_solidos = vaz_caldo_kg_h * (brix_entrada / 100);
+
+  // 5) Vazão total após caleação
+  const vaz_saida_kg_h = vaz_caldo_kg_h + vaz_agua_kg + vaz_cal_kg;
+
+  // 6) °Brix após diluição
+  const brix_saida = (massa_solidos / vaz_saida_kg_h) * 100;
 
   return {
     Caleacao: {
-      "Vazão de Cal (kg/h)": vaz_cal_kg,
-      "Vazão de Água (kg/h)": vaz_h2o_kg,
+      "Brix Saída (°Bx)": Number(brix_saida.toFixed(2)),
+      "Vazão Caldo Saída (kg/h)": Number(vaz_saida_kg_h.toFixed(2)),
+      "Vazão de Cal (kg/h)": Number(vaz_cal_kg.toFixed(2)),
+      "Vazão de Água (kg/h)": Number(vaz_agua_kg.toFixed(2)),
     },
   };
 }
@@ -756,7 +774,7 @@ export function calcularEvaporadores({
       "Lista Vapor Entrada por Efeito (kg/h)": arrumarLista(
         finalSim?.vazVap_list ?? []
       ),
-      "Injeção de Vapor VE (kg/h)": roundTo(vapor_entrada_12 / 1000, 2),
+      "Injeção de Vapor VE (ton/h)": roundTo(vapor_entrada_12 / 1000, 2),
       "Taxa de Evaporação (%)": finalSim?.taxaEvap ?? [],
       "Lista de Vapores Gerados (kg/h)": arrumarLista(
         finalSim?.vapGeradoTotal ?? []

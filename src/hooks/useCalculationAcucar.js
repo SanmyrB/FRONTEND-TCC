@@ -115,8 +115,10 @@ export const useCalculation = (dados, listaOriginalEvaporadores) => {
       );
 
       // =============== CÁLCULO DA CALEAÇÃO ===============
-      const Caleacao = PrevLib.calcularCaleacao(
-        parseFloat(dados.vazaoCaldoPrimario)
+      const Caleacao = PrevLib.calcularBrixPosCaleacao(
+        parseFloat(dados.vazaoCaldoPrimario),
+        parseFloat(dados.brixCaldoPrimario),
+        Extracao?.Extração?.["Tonelada de Cana por hora"] || 0
       );
 
       // =============== TEMPERATURAS DOS REGENERADORES ===============
@@ -133,8 +135,8 @@ export const useCalculation = (dados, listaOriginalEvaporadores) => {
       const TrocadorCalor = PrevLib.calcularAquecimento({
         nome: "TrocadorCalor",
         temp_entrada: ultimaTemperatura_regeneradores,
-        brix: parseFloat(dados.brixCaldoPrimario),
-        vaz_entrada: parseFloat(dados.vazaoCaldoPrimario),
+        brix: Caleacao?.Caleacao?.["Brix Saída (°Bx)"],
+        vaz_entrada: Caleacao?.Caleacao?.["Vazão Caldo Saída (kg/h)"] / 1000,
       });
 
       // =============== TEMPERATURAS DO TROCADOR DE CALOR ===============
@@ -149,7 +151,9 @@ export const useCalculation = (dados, listaOriginalEvaporadores) => {
 
       // =============== CÁLCULO DO BALÃO FLASH ===============
       const Flash = PrevLib.calcularBalaoFlash(
-        parseFloat(dados.vazaoCaldoPrimario),
+        parseFloat(
+          Caleacao?.Caleacao?.["Vazão Caldo Saída (kg/h)"] / 1000 || 0
+        ),
         parseFloat(dados.brixCaldoPrimario),
         ultimaTemperatura_TrocadorCalor,
         99 // Temperatura fixa do balão flash

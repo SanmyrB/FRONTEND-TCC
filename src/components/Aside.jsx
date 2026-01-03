@@ -25,9 +25,11 @@ export default function Sidebar() {
     <aside className="flex flex-col bg-white h-screen w-[20%] p-6 shadow-md sticky top-0">
       {/* Header - fixo no topo */}
       <div className="shrink-0">
-        <div className="bg-gray-300 rounded-2xl shadow p-4 mb-4 text-center">
-          <h1 className="font-bold text-1xl">SIMULADOR</h1>
-        </div>
+        <img
+          src="../public/img/Logo_Usina.png"
+          alt="Logo Usina"
+          className="mb-4"
+        />
         <div className="linha-horizontal w-full h-px bg-gray-300 my-4"></div>
       </div>
 

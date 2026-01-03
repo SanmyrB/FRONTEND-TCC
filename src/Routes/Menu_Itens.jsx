@@ -8,6 +8,7 @@ import {
   Lollipop,
   TrendingUp,
   LibraryBig,
+  Zap,
 } from "lucide-react";
 import Menu_Button from "../components/Menu_Button";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -23,43 +24,13 @@ export default function SidebarMenu() {
     if (usuarioLogado) {
       try {
         const userData = JSON.parse(usuarioLogado);
-        console.log("Dados do usuário no menu:", userData); // Debug
-
-        // Mapeamento de áreas
-        const areaMap = {
-          0: "Laboratório",
-          1: "Armazém",
-          2: "Planejamento e Controle da Produção",
-          Laboratório: "Laboratório",
-          Armazém: "Armazém",
-          "Planejamento e Controle da Produção":
-            "Planejamento e Controle da Produção",
-          PCP: "Planejamento e Controle da Produção",
-        };
-
-        const area = areaMap[userData.area] || userData.area || "";
+        const area = userData.area || "";
         setUserArea(area);
-      } catch (error) {
-        console.error("Erro ao processar dados do usuário:", error);
+      } catch {
+        // Erro ao processar dados do usuário
       }
     }
   }, []);
-
-  const getActivePage = () => {
-    const path = location.pathname;
-    if (path.includes("/nova-analise")) return "documents";
-    if (path.includes("/controle-estatistico")) return "cep";
-    if (path.includes("/solicitacoes")) return "solicitacao";
-    if (path.includes("/visualizar-analises")) return "VisulAnalises";
-    return "home";
-  };
-
-  const [activePage, setActivePage] = useState(getActivePage());
-
-  // Atualiza o estado ativo quando a location muda
-  useEffect(() => {
-    setActivePage(getActivePage());
-  }, [location]);
 
   // Menu base com todas as opções
   const allMenuOptions = [
@@ -73,6 +44,7 @@ export default function SidebarMenu() {
         "Armazém",
         "Planejamento e Controle da Produção",
         "Fábrica de Açúcar",
+        "Caldeira",
       ],
     },
     {
@@ -124,6 +96,20 @@ export default function SidebarMenu() {
       path: "/home/gestao-estoque",
       areas: ["Planejamento e Controle da Produção"],
     },
+    {
+      id: "FabVap",
+      label: "Produção de Vapor",
+      icon: Zap,
+      path: "/home/producao-vapor",
+      areas: ["Caldeira"],
+    },
+    {
+      id: "PrevVap",
+      label: "Previsibilidade de Vapor",
+      icon: TrendingUp,
+      path: "/home/previsibilidade-vapor",
+      areas: ["Caldeira"],
+    },
   ];
 
   // Filtra as opções do menu baseado na área do usuário
@@ -132,7 +118,6 @@ export default function SidebarMenu() {
   );
 
   const handleNavigation = (pageId, path) => {
-    setActivePage(pageId);
     navigate(path);
   };
 
@@ -141,7 +126,7 @@ export default function SidebarMenu() {
       <nav className="mt-2">
         {menuOptions.map((option) => {
           const IconComponent = option.icon;
-          const isActive = activePage === option.id;
+          const isActive = location.pathname === option.path;
 
           return (
             <Menu_Button
