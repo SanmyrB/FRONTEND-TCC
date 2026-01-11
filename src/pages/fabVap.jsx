@@ -1,4 +1,4 @@
-const FabAcucar = () => {
+const fabVap = () => {
   return (
     <div className="p-6 relative">
       <h1 className="text-2xl font-bold mb-4">
@@ -11,4 +11,4 @@ const FabAcucar = () => {
   );
 };
 
-export default FabAcucar;
+export default fabVap;

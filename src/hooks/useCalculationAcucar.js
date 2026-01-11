@@ -17,7 +17,11 @@ const filtrarListaEvaporadores = (listaOriginal, valorParaRemover) => {
   return novaLista;
 };
 
-export const useCalculation = (dados, listaOriginalEvaporadores) => {
+export const useCalculation = (
+  dados,
+  listaOriginalEvaporadores,
+  filtrarEvaporadores = true
+) => {
   const [calculando, setCalculando] = useState(false);
   const [resultados, setResultados] = useState(null);
   const [listaEvaporadoresFiltrada, setListaEvaporadoresFiltrada] = useState([
@@ -29,7 +33,7 @@ export const useCalculation = (dados, listaOriginalEvaporadores) => {
     useState(null);
   const [erro, setErro] = useState(null);
 
-  const validarDados = () => {
+  const validarDados = (filtrarEvaporadores) => {
     const camposObrigatorios = [
       "toneladaCana",
       "umidadeBagaço",
@@ -46,10 +50,14 @@ export const useCalculation = (dados, listaOriginalEvaporadores) => {
       "polFiltrado",
       "pressaoVapor",
       "polXarope",
-      "areaEvaporador",
       "brixMelF",
       "purezMelF",
     ];
+
+    // Adicionar areaEvaporador apenas se filtrarEvaporadores for true
+    if (filtrarEvaporadores) {
+      camposObrigatorios.push("areaEvaporador");
+    }
 
     for (const campo of camposObrigatorios) {
       if (!dados[campo] && dados[campo] !== 0) {
@@ -78,14 +86,17 @@ export const useCalculation = (dados, listaOriginalEvaporadores) => {
 
     try {
       // Validação dos dados
-      validarDados();
+      validarDados(filtrarEvaporadores);
 
-      // Filtrar lista de evaporadores
-      const listaFiltrada = filtrarListaEvaporadores(
-        listaOriginalEvaporadores,
-        dados.areaEvaporador
-      );
-      setListaEvaporadoresFiltrada(listaFiltrada);
+      // Filtrar lista de evaporadores (se habilitado)
+      let listaParaUsar = listaOriginalEvaporadores;
+      if (filtrarEvaporadores) {
+        listaParaUsar = filtrarListaEvaporadores(
+          listaOriginalEvaporadores,
+          dados.areaEvaporador
+        );
+      }
+      setListaEvaporadoresFiltrada(listaParaUsar);
 
       // =============== CÁLCULO DA EXTRAÇÃO ===============
       const Extracao = PrevLib.calcularMoenda({
@@ -217,7 +228,7 @@ export const useCalculation = (dados, listaOriginalEvaporadores) => {
         vaz_caldo: vazaoPeneira,
         temp_inicial: 99, // Temperatura fixa inicial
         press_vapor: parseFloat(dados.pressaoVapor) + 1, // Pressão ajustada
-        listaEvap: listaFiltrada,
+        listaEvap: listaParaUsar,
         alvo_brix_final: [60, 63], // Range de brix final
       });
 
@@ -252,6 +263,10 @@ export const useCalculation = (dados, listaOriginalEvaporadores) => {
         Cozedores,
       };
 
+      console.log(
+        "Resultados consolidados da produção:",
+        resultadosConsolidados
+      );
       setResultados(resultadosConsolidados);
       return resultadosConsolidados;
     } catch (error) {
@@ -274,10 +289,7 @@ export const useCalculation = (dados, listaOriginalEvaporadores) => {
     setListaEvaporadoresFiltrada([...listaOriginalEvaporadores]);
   };
 
-  const recalcularComNovosDados = async (novosDados) => {
-    // Atualiza os dados e recalcula
-    return await calcularProducao(novosDados);
-  };
+  const getResultados = () => resultados;
 
   return {
     // Estados
@@ -291,7 +303,7 @@ export const useCalculation = (dados, listaOriginalEvaporadores) => {
     // Ações
     calcularProducao,
     limparResultados,
-    recalcularComNovosDados,
+    getResultados,
 
     // Utilitários
     hasResultados: !!resultados,
@@ -305,7 +317,8 @@ export const usePrevAcucarCalculation = () => {
 
   return {
     listaOriginalEvaporadores,
-    useCalculation: (dados) => useCalculation(dados, listaOriginalEvaporadores),
+    useCalculation: (dados) =>
+      useCalculation(dados, listaOriginalEvaporadores, true),
   };
 };
 

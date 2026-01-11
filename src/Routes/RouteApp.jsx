@@ -17,6 +17,8 @@ import PrevAcucar from "../pages/PrevAcucar";
 import controleEstoque from "../pages/controleEstoque";
 import FabVap from "../pages/fabVap";
 import prevVap from "../pages/prevVap";
+import fabDest from "../pages/fabDest";
+import prevDest from "../pages/prevDest";
 
 const Private = ({ Item, allowedAreas }) => {
   // ✅ Verifica sessionStorage para manter o login durante a sessão
@@ -26,8 +28,6 @@ const Private = ({ Item, allowedAreas }) => {
 
   try {
     const userData = JSON.parse(usuarioLogado);
-    console.log("Dados do usuário na rota:", userData); // Debug
-
     const userArea = userData.area;
 
     // Se áreas específicas forem definidas e o usuário não tiver acesso
@@ -54,7 +54,7 @@ const Private = ({ Item, allowedAreas }) => {
 
     return <Item />;
   } catch (error) {
-    console.error("Erro ao processar dados do usuário:", error);
+    console.error(error);
     return <SignIn />;
   }
 };
@@ -93,6 +93,7 @@ const RoutesApp = () => {
                     "Planejamento e Controle da Produção",
                     "Fábrica de Açúcar",
                     "Caldeira",
+                    "Destilaria",
                   ]}
                 />
               }
@@ -166,6 +167,16 @@ const RoutesApp = () => {
             <Route
               path="producao-vapor"
               element={<Private Item={FabVap} allowedAreas={["Caldeira"]} />}
+            />
+            <Route
+              path="previsibilidade-destilaria"
+              element={
+                <Private Item={prevDest} allowedAreas={["Destilaria"]} />
+              }
+            />
+            <Route
+              path="producao-destilaria"
+              element={<Private Item={fabDest} allowedAreas={["Destilaria"]} />}
             />
           </Route>
 

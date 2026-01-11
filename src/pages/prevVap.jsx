@@ -21,7 +21,7 @@ import SelectInput from "../components/SelectInput";
 
 import { usePrevVapCalculation } from "../hooks/useCalculationCald";
 
-const FabVap = () => {
+const prevVap = () => {
   const [menuAberto, setMenuAberto] = useState(false);
   const [modalAberto, setModalAberto] = useState(null);
 
@@ -61,7 +61,7 @@ const FabVap = () => {
         Previsibilidade da Produção de Vapor e Eletricidade
       </h1>
       <h2 className="text-xl mb-6 text-gray-600">
-        Sistema os dados de interesse para prever a produção de vapor e
+        Insira os dados de interesse para prever a produção de vapor e
         eletricidade
       </h2>
 
@@ -342,4 +342,4 @@ const FabVap = () => {
   );
 };
 
-export default FabVap;
+export default prevVap;

@@ -9,6 +9,7 @@ import {
   TrendingUp,
   LibraryBig,
   Zap,
+  Droplets,
 } from "lucide-react";
 import Menu_Button from "../components/Menu_Button";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -45,6 +46,7 @@ export default function SidebarMenu() {
         "Planejamento e Controle da Produção",
         "Fábrica de Açúcar",
         "Caldeira",
+        "Destilaria",
       ],
     },
     {
@@ -109,6 +111,20 @@ export default function SidebarMenu() {
       icon: TrendingUp,
       path: "/home/previsibilidade-vapor",
       areas: ["Caldeira"],
+    },
+    {
+      id: "fabDest",
+      label: "Produção de Álcool",
+      icon: Droplets,
+      path: "/home/producao-destilaria",
+      areas: ["Destilaria"],
+    },
+    {
+      id: "prevDest",
+      label: "Previsibilidade de Álcool",
+      icon: TrendingUp,
+      path: "/home/previsibilidade-destilaria",
+      areas: ["Destilaria"],
     },
   ];
 
