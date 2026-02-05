@@ -20,7 +20,6 @@ const Solicitacoes = () => {
 
   const divOcultaRef = useRef(null);
 
-  // Função para obter a cor baseada na classificação (para texto)
   const getCorClassificacao = (classificacao) => {
     switch (classificacao) {
       case "Especial 1":
@@ -36,7 +35,6 @@ const Solicitacoes = () => {
     }
   };
 
-  // Função para obter a cor HEX baseada na classificação (para o ícone)
   const getCorIcone = (classificacao) => {
     switch (classificacao) {
       case "Especial 1":
@@ -52,9 +50,7 @@ const Solicitacoes = () => {
     }
   };
 
-  // ✅ NOVA FUNÇÃO: Notificar outras páginas sobre alteração
   const notificarAlteracao = () => {
-    // Notifica a página de visualização (armazém)
     window.postMessage(
       {
         type: "ANALISE_ALTERADA",
@@ -63,7 +59,6 @@ const Solicitacoes = () => {
       window.location.origin
     );
 
-    // Notifica abas abertas da última análise
     window.postMessage(
       {
         type: "FORCAR_ATUALIZACAO",
@@ -71,7 +66,7 @@ const Solicitacoes = () => {
       window.location.origin
     );
 
-    console.log("📢 Notificando outras páginas sobre alteração");
+    console.log("Notificando outras páginas sobre alteração");
   };
 
   // Buscar a última análise do banco de dados
@@ -159,7 +154,6 @@ const Solicitacoes = () => {
     return true;
   };
 
-  // ✅ ATUALIZADA: Função para enviar a alteração com notificação
   const handleEnviarAlteracao = async () => {
     if (!ultimaAnalise || !ultimaAnalise.id) {
       setError(
@@ -224,7 +218,6 @@ const Solicitacoes = () => {
 
       setMensagemSucesso("Alteração enviada com sucesso!");
 
-      // ✅ ATUALIZADO: Recarrega e notifica com mais força
       const refreshResponse = await fetch(
         "http://localhost:3001/api/ultima-analise"
       );
@@ -232,7 +225,6 @@ const Solicitacoes = () => {
         const newData = await refreshResponse.json();
         setUltimaAnalise(newData);
 
-        // ✅ NOTIFICAÇÃO MAIS ROBUSTA
         window.postMessage(
           {
             type: "ANALISE_ALTERADA",
@@ -242,7 +234,6 @@ const Solicitacoes = () => {
           window.location.origin
         );
 
-        // ✅ ENVIA MÚLTIPLAS NOTIFICAÇÕES PARA GARANTIR
         setTimeout(() => {
           window.postMessage(
             {
@@ -253,7 +244,6 @@ const Solicitacoes = () => {
         }, 500);
       }
 
-      // Limpar formulário e ocultar div
       setTimeout(() => {
         handleCancelar();
       }, 2000);
@@ -265,7 +255,6 @@ const Solicitacoes = () => {
     }
   };
 
-  // Efeito para fazer scroll quando a div oculta for mostrada
   useEffect(() => {
     if (mostrarDivOculta && divOcultaRef.current) {
       divOcultaRef.current.scrollIntoView({
@@ -275,14 +264,12 @@ const Solicitacoes = () => {
     }
   }, [mostrarDivOculta]);
 
-  // Função para exibir o valor ou estado de carregamento
   const exibirValor = (campo) => {
     if (loading) return "Carregando...";
     if (!ultimaAnalise) return "N/A";
     return ultimaAnalise[campo] || "N/A";
   };
 
-  // Obter as cores atuais para a classificação
   const corClassificacao = ultimaAnalise
     ? getCorClassificacao(ultimaAnalise.classif)
     : "text-gray-600";
