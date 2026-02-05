@@ -255,7 +255,7 @@ const UltimaAnalisePage = () => {
   const corClassificacao = getCorClassificacao(analise.classif);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className=`min-h-screen ${corClassificacao} p-6`>
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <div>
