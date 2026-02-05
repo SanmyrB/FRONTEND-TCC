@@ -18,38 +18,34 @@ const UltimaAnalisePage = () => {
       setLoading(true);
       setError(null);
 
-      // ✅ CORREÇÃO: Se recebeu dados externos, usa eles diretamente
       if (dadosExternos) {
-        console.log("📨 Usando dados externos:", dadosExternos);
+        console.log("Usando dados externos:", dadosExternos);
         setAnalise(dadosExternos);
         setUltimaAtualizacao(new Date());
         setLoading(false);
         return;
       }
 
-      // ✅ CORREÇÃO: Tenta carregar da URL primeiro (quando abre via link)
       const dadosUrl = searchParams.get("dados");
       if (dadosUrl && !dadosRecebidosRef.current) {
         try {
           const dadosDecodificados = JSON.parse(decodeURIComponent(dadosUrl));
-          console.log("📄 Usando dados da URL:", dadosDecodificados);
+          console.log("Usando dados da URL:", dadosDecodificados);
           setAnalise(dadosDecodificados);
           dadosRecebidosRef.current = true;
           setLoading(false);
           return;
         } catch (urlError) {
           console.error("Erro ao decodificar dados da URL:", urlError);
-          // Continua para buscar do servidor
         }
       }
 
-      // ✅ CORREÇÃO: Busca do servidor com tratamento de erro melhorado
-      console.log("🔍 Buscando dados do servidor...");
+      console.log("Buscando dados do servidor...");
       const response = await fetch("http://localhost:3001/api/ultima-analise");
 
       if (response.ok) {
         const data = await response.json();
-        console.log("✅ Dados do servidor:", data);
+        console.log("Dados do servidor:", data);
 
         if (data.success) {
           setAnalise(data);
@@ -65,7 +61,7 @@ const UltimaAnalisePage = () => {
         }
       }
     } catch (error) {
-      console.error("❌ Erro ao carregar análise:", error);
+      console.error("Erro ao carregar análise:", error);
       setError("Erro de conexão com o servidor");
     } finally {
       setLoading(false);
@@ -76,45 +72,41 @@ const UltimaAnalisePage = () => {
     const handleMessage = (event) => {
       if (event.origin !== window.location.origin) return;
 
-      console.log("📨 Mensagem recebida:", event.data);
+      console.log("Mensagem recebida:", event.data);
 
       if (event.data && event.data.type === "ATUALIZAR_ULTIMA_ANALISE") {
-        console.log("🔄 Recebendo dados atualizados da aba principal");
+        console.log("Recebendo dados atualizados da aba principal");
         carregarAnalise(event.data.dados);
       }
 
       if (event.data && event.data.type === "FORCAR_ATUALIZACAO") {
-        console.log("🔄 Forçando atualização via mensagem");
+        console.log("Forçando atualização via mensagem");
         carregarAnalise();
       }
 
-      // ✅ NOVO: Escuta notificações de alteração
       if (event.data && event.data.type === "ANALISE_ALTERADA") {
-        console.log("📢 Recebida notificação de alteração de análise");
+        console.log("Recebida notificação de alteração de análise");
         carregarAnalise();
       }
     };
 
     window.addEventListener("message", handleMessage);
 
-    // ✅ CORREÇÃO: Solicita dados iniciais da aba principal apenas se for uma aba filha
     if (window.opener) {
-      console.log("👶 Esta é uma aba filha, solicitando dados...");
+      console.log("Esta é uma aba filha, solicitando dados...");
       window.opener.postMessage(
         { type: "SOLICITAR_DADOS_ATUALIZADOS" },
         window.location.origin
       );
 
-      // ✅ Timeout de segurança para caso não receba resposta
       setTimeout(() => {
         if (loading && !analise) {
-          console.log("⏰ Timeout: buscando dados do servidor...");
+          console.log("Timeout: buscando dados do servidor...");
           carregarAnalise();
         }
       }, 3000);
     } else {
-      console.log("🖥️ Esta é uma aba independente, buscando dados...");
-      // Se não for uma aba filha, busca diretamente do servidor
+      console.log("Esta é uma aba independente, buscando dados...");
       carregarAnalise();
     }
 
@@ -127,7 +119,7 @@ const UltimaAnalisePage = () => {
     if (!autoRefresh) return;
 
     const intervalo = setInterval(() => {
-      console.log("🔄 Atualização automática...");
+      console.log("Atualização automática...");
       carregarAnalise();
     }, 30000);
 
@@ -135,7 +127,7 @@ const UltimaAnalisePage = () => {
   }, [autoRefresh]);
 
   const forcarAtualizacao = async () => {
-    console.log("🔄 Forçando atualização manual...");
+    console.log("Forçando atualização manual...");
     await carregarAnalise();
   };
 
@@ -186,7 +178,6 @@ const UltimaAnalisePage = () => {
     }
   };
 
-  // ✅ CORREÇÃO: Melhor tratamento de estados de loading e erro
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
@@ -263,8 +254,8 @@ const UltimaAnalisePage = () => {
             <p className="text-gray-600">Visualização em tempo real</p>
             <p className="text-sm text-gray-500">
               {window.opener
-                ? "🔗 Conectado com aba principal"
-                : "📱 Visualização independente"}
+                ? "Conectado com aba principal"
+                : "Visualização independente"}
             </p>
           </div>
           <div className="flex gap-2">
